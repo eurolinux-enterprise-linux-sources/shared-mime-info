@@ -1,7 +1,7 @@
 Summary: Shared MIME information database
 Name: shared-mime-info
 Version: 0.70
-Release: 4%{?dist}
+Release: 6%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://freedesktop.org/Software/shared-mime-info
@@ -18,6 +18,7 @@ BuildRequires:  gettext
 # For intltool:
 BuildRequires: perl(XML::Parser) intltool
 Requires: pkgconfig
+Requires(post): glib2
 
 %description
 This is the freedesktop.org shared MIME info database.
@@ -65,6 +66,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man*/*
 
 %changelog
+* Wed May 21 2014 Bastien Nocera <bnocera@redhat.com> 0.70-6
+- Rebuild for tagging
+Resolves: #974505
+
+* Wed May 21 2014 Bastien Nocera <bnocera@redhat.com> 0.70-5
+- Add glib2 Requires for update-mime-database to work in post
+Resolves: #974505
+
 * Tue Jun 01 2010 Bastien Nocera <bnocera@redhat.com> 0.70-4
 - Update some OO.o defaults, patch from Caolan McNamara
 Related: rhbz#580232
