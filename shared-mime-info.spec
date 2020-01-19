@@ -1,7 +1,7 @@
 Summary: Shared MIME information database
 Name: shared-mime-info
 Version: 1.1
-Release: 5%{?dist}
+Release: 7%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://freedesktop.org/Software/shared-mime-info
@@ -81,11 +81,18 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*
 %{_bindir}/*
 %{_datadir}/mime/packages/*
 %{_datadir}/applications/defaults.list
+# better to co-own the directory than pull in pkgconfig
 %dir %{_datadir}/pkgconfig
 %{_datadir}/pkgconfig/shared-mime-info.pc
 %{_mandir}/man*/*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.1-7
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.1-6
+- Mass rebuild 2013-12-27
+
 * Sat Jun  8 2013 Matthias Clasen <mclasen@redhat.com> - 1.1-5
 - Drop pkgconfig dep, instead co-own /usr/share/pkgconfig
 
