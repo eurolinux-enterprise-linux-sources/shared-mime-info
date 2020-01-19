@@ -1,7 +1,7 @@
 Summary: Shared MIME information database
 Name: shared-mime-info
 Version: 1.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://freedesktop.org/Software/shared-mime-info
@@ -96,6 +96,12 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*
 %{_mandir}/man*/*
 
 %changelog
+* Wed Sep 20 2017 Bastien Nocera <bnocera@redhat.com> - 1.8-4
++ shared-mime-info-1.8-4
+- Fix CSV files being associated with LibreOffice Math instead
+  of LibreOffice Calc
+- Resolves: #1438589
+
 * Wed Mar 22 2017 Bastien Nocera <bnocera@redhat.com> - 1.8-3
 + shared-mime-info-1.8-3
 - Remove triggers, they're not supported in RHEL 7.4's RPM
