@@ -1,0 +1,34 @@
+From 33bce05a5fed6ca8d85ff4c7e0205c9a1ed32e25 Mon Sep 17 00:00:00 2001
+From: David Zeuthen <zeuthen@gmail.com>
+Date: Fri, 26 Jul 2013 12:51:17 -0700
+Subject: [PATCH] Add MIME types for raw disk images
+
+https://bugs.freedesktop.org/show_bug.cgi?id=64845
+---
+ freedesktop.org.xml.in       |  12 ++++++++++++
+
+diff --git a/freedesktop.org.xml.in b/freedesktop.org.xml.in
+index 5e85d90..9dcb6e6 100644
+--- a/freedesktop.org.xml.in
++++ b/freedesktop.org.xml.in
+@@ -1481,8 +1481,20 @@ command to generate the output files.
+     <_comment>Apple disk image</_comment>
+     <glob pattern="*.dmg"/>
+   </mime-type>
++  <mime-type type="application/x-raw-disk-image">
++     <_comment>Raw disk image</_comment>
++     <glob pattern="*.raw-disk-image"/>
++     <glob pattern="*.img"/>
++   </mime-type>
++   <mime-type type="application/x-raw-disk-image-xz-compressed">
++     <_comment>Raw disk image (XZ-compressed)</_comment>
++     <sub-class-of type="application/x-xz"/>
++     <glob pattern="*.raw-disk-image.xz"/>
++     <glob pattern="*.img.xz"/>
++   </mime-type>
+   <mime-type type="application/x-cd-image">
+     <_comment>raw CD image</_comment>
++    <sub-class-of type="application/x-raw-disk-image"/>
+     <alias type="application/x-iso9660-image"/>
+     <glob pattern="*.iso"/>
+     <glob pattern="*.iso9660"/>

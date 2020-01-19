@@ -1,7 +1,7 @@
 Summary: Shared MIME information database
 Name: shared-mime-info
 Version: 1.1
-Release: 7%{?dist}
+Release: 9%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://freedesktop.org/Software/shared-mime-info
@@ -19,6 +19,8 @@ Source4: shotwell-viewer-defaults.list
 
 # Work-around for https://bugs.freedesktop.org/show_bug.cgi?id=40354
 Patch0: 0001-Remove-sub-classing-from-OO.o-mime-types.patch
+# Support for raw disk images (from upstream)
+Patch1: 0001-Add-MIME-types-for-raw-disk-images.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  libxml2-devel
@@ -40,6 +42,7 @@ and looking up the correct MIME type in a database.
 %prep
 %setup -q
 %patch0 -p1 -b .ooo-zip
+%patch1 -p1 -b .raw
 
 %build
 
@@ -87,6 +90,14 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*
 %{_mandir}/man*/*
 
 %changelog
+* Fri Jul 17 2015 Matthias Clasen <mclasen@redhat.com> 1.1-9
+- Add support for raw disk images
+  Related: #1211198
+
+* Tue Jun 30 2015 Ray Strode <rstrode@redhat.com> 1.1-8
+- Update default file assocations to match rebased names
+  Resolves: #1235413
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.1-7
 - Mass rebuild 2014-01-24
 
