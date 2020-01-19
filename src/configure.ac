@@ -1,4 +1,4 @@
-AC_INIT([shared-mime-info],[1.1],[https://bugs.freedesktop.org/enter_bug.cgi?product=shared-mime-info])
+AC_INIT([shared-mime-info],[1.8],[https://bugs.freedesktop.org/enter_bug.cgi?product=shared-mime-info])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-xz check-news])
 
@@ -19,6 +19,8 @@ IT_PROG_INTLTOOL([0.35.0])
 GETTEXT_PACKAGE=shared-mime-info
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
+
+AC_CHECK_FUNCS(fdatasync)
 
 dnl Check for cross compiling
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)

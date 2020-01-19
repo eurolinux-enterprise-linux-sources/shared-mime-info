@@ -1,26 +1,24 @@
 Summary: Shared MIME information database
 Name: shared-mime-info
-Version: 1.1
-Release: 9%{?dist}
+Version: 1.8
+Release: 3%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://freedesktop.org/Software/shared-mime-info
 Source0: http://people.freedesktop.org/~hadess/%{name}-%{version}.tar.xz
-Source1: defaults.list
+Source1: gnome-mimeapps.list
 # Generated with:
-# for i in `cat /home/hadess/Projects/jhbuild/totem/data/mime-type-list.txt | grep -v real | grep -v ^#` ; do if grep MimeType /home/hadess/Projects/jhbuild/rhythmbox/data/rhythmbox.desktop.in.in | grep -q "$i;" ; then echo "$i=rhythmbox.desktop;totem.desktop;" >> totem-defaults.list ; else echo "$i=totem.desktop;" >> totem-defaults.list ; fi ; done ; for i in `cat /home/hadess/Projects/jhbuild/totem/data/uri-schemes-list.txt | grep -v ^#` ; do echo "x-scheme-handler/$i=totem.desktop;" >> totem-defaults.list ; done
+# for i in `cat /home/hadess/Projects/jhbuild/totem/data/mime-type-list.txt | grep -v audio/flac | grep -v ^#` ; do if grep MimeType /home/hadess/Projects/jhbuild/rhythmbox/data/rhythmbox.desktop.in.in | grep -q "$i;" ; then echo "$i=rhythmbox.desktop;org.gnome.Totem.desktop;" >> totem-defaults.list ; else echo "$i=org.gnome.Totem.desktop;" >> totem-defaults.list ; fi ; done ; for i in `cat /home/hadess/Projects/jhbuild/totem/data/uri-schemes-list.txt | grep -v ^#` ; do echo "x-scheme-handler/$i=org.gnome.Totem.desktop;" >> totem-defaults.list ; done
 Source2: totem-defaults.list
 # Generated with:
-# for i in `grep MimeType= /usr/share/applications/file-roller.desktop | sed 's/MimeType=//' | sed 's/;/ /g'` application/x-source-rpm ; do if ! `grep -q $i defaults.list` ; then echo $i=file-roller.desktop\; >> file-roller-defaults.list ; fi ; done
+# for i in `grep MimeType= /usr/share/applications/org.gnome.FileRoller.desktop | sed 's/MimeType=//' | sed 's/;/ /g'` application/x-source-rpm ; do if ! `grep -q $i defaults.list` ; then echo $i=org.gnome.FileRoller.desktop\; >> file-roller-defaults.list ; fi ; done
 Source3: file-roller-defaults.list
 # Generated with:
-# for i in `grep MimeType= /usr/share/applications/shotwell-viewer.desktop | sed 's/MimeType=//' | sed 's/;/ /g'` ; do echo $i=shotwell-viewer.desktop\; >> shotwell-viewer-defaults.list ; done
-Source4: shotwell-viewer-defaults.list
+# for i in `grep MimeType= /usr/share/applications/eog.desktop | sed 's/MimeType=//' | sed 's/;/ /g'` ; do echo $i=eog.desktop\; >> eog-defaults.list ; done
+Source4: eog-defaults.list
 
 # Work-around for https://bugs.freedesktop.org/show_bug.cgi?id=40354
 Patch0: 0001-Remove-sub-classing-from-OO.o-mime-types.patch
-# Support for raw disk images (from upstream)
-Patch1: 0001-Add-MIME-types-for-raw-disk-images.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  libxml2-devel
@@ -30,6 +28,10 @@ BuildRequires:  gettext
 BuildRequires: perl(XML::Parser) intltool
 
 Requires(post): glib2
+Requires(post): coreutils
+
+# Disable pkgconfig autodep
+%global __requires_exclude ^/usr/bin/pkg-config$
 
 %description
 This is the freedesktop.org shared MIME info database.
@@ -40,17 +42,16 @@ a file. This is generally done by examining the file's name or contents,
 and looking up the correct MIME type in a database.
 
 %prep
-%setup -q
-%patch0 -p1 -b .ooo-zip
-%patch1 -p1 -b .raw
+%autosetup
 
 %build
-
-%configure
-# make %{?_smp_mflags}
+%configure --disable-silent-rules --disable-update-mimedb
+# not smp safe, pretty small package anyway
 make
 
 %install
+# speed build a bit
+PKGSYSTEM_ENABLE_FSYNC=0 \
 make install DESTDIR=$RPM_BUILD_ROOT
 
 find $RPM_BUILD_ROOT%{_datadir}/mime -type d \
@@ -59,37 +60,52 @@ find $RPM_BUILD_ROOT%{_datadir}/mime -type f -not -path "*/packages/*" \
 | sed -e "s|^$RPM_BUILD_ROOT|%%ghost |" >> %{name}.files
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications
-install -m 644 %SOURCE1 $RPM_BUILD_ROOT/%{_datadir}/applications/defaults.list
-cat %SOURCE2 >> $RPM_BUILD_ROOT/%{_datadir}/applications/defaults.list
-cat %SOURCE3 >> $RPM_BUILD_ROOT/%{_datadir}/applications/defaults.list
-cat %SOURCE4 >> $RPM_BUILD_ROOT/%{_datadir}/applications/defaults.list
+install -m 644 %SOURCE1 $RPM_BUILD_ROOT/%{_datadir}/applications/gnome-mimeapps.list
+cat %SOURCE2 >> $RPM_BUILD_ROOT/%{_datadir}/applications/gnome-mimeapps.list
+cat %SOURCE3 >> $RPM_BUILD_ROOT/%{_datadir}/applications/gnome-mimeapps.list
+cat %SOURCE4 >> $RPM_BUILD_ROOT/%{_datadir}/applications/gnome-mimeapps.list
+
+# Support fallback/generic mimeapps.list (currently based on gnome-mimeapps.list), see
+# https://lists.fedoraproject.org/pipermail/devel/2015-July/212403.html
+# https://bugzilla.redhat.com/show_bug.cgi?id=1243049
+cp $RPM_BUILD_ROOT%{_datadir}/applications/gnome-mimeapps.list \
+   $RPM_BUILD_ROOT%{_datadir}/applications/mimeapps.list
 
 ## remove bogus translation files
 ## translations are already in the xml file installed
 rm -rf $RPM_BUILD_ROOT%{_datadir}/locale/*
 
-%if 0%{?fedora} < 17
-# f17+ mozilla-firefox.desktop renamed to firefox.desktop (#736558)
-# defaults.list fixed, handle this exceptional case separately, if at all
-%endif
-
 
 %post
-# Should fail, as it would mean a problem in the mime database
-%{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null
+/bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
+
+%posttrans
+%{_bindir}/update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null ||:
 
 %files -f %{name}.files
-%defattr(-,root,root,-)
-%doc README NEWS HACKING COPYING shared-mime-info-spec.xml
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc README NEWS HACKING shared-mime-info-spec.xml
 %{_bindir}/*
 %{_datadir}/mime/packages/*
-%{_datadir}/applications/defaults.list
-# better to co-own the directory than pull in pkgconfig
+%{_datadir}/applications/mimeapps.list
+%{_datadir}/applications/gnome-mimeapps.list
+# better to co-own this dir than to pull in pkgconfig
 %dir %{_datadir}/pkgconfig
 %{_datadir}/pkgconfig/shared-mime-info.pc
 %{_mandir}/man*/*
 
 %changelog
+* Wed Mar 22 2017 Bastien Nocera <bnocera@redhat.com> - 1.8-3
++ shared-mime-info-1.8-3
+- Remove triggers, they're not supported in RHEL 7.4's RPM
+Resolves: #1433916
+
+* Wed Mar 01 2017 Bastien Nocera <bnocera@redhat.com> - 1.8-2
++ shared-mime-info-1.8-2
+- Rebase to 1.8
+Resolves: #1387045
+
 * Fri Jul 17 2015 Matthias Clasen <mclasen@redhat.com> 1.1-9
 - Add support for raw disk images
   Related: #1211198

@@ -1,3 +1,161 @@
+shared-mime-info 1.8 (2016-12-05)
+* Add Flatpak-related mime-types
+* Add mime-type for a number of Thomson-related disk (and cassette) images
+* Add many audio and video mime-type aliases as used in VLC
+* Add mime-type for pdf.lz files
+* Write the correct length for literal and glob lists to the cache
+* Build fixes
+
+shared-mime-info 1.7 (2016-09-05)
+* Add mime-types for a number of video games systems ROMS
+  (Atari 7800, Atari 2600, Neo Geo Pocket, Sega CD/Mega-CD, Game Boy Color,
+   Genesis 32X, Sega SG-1000, Sega Game Gear, Sega Pico)
+* Add mime-type for .tar.lz and tar.lz4 archives
+* Add mime-type for Jupyter Notebook files
+* Add Flatpak mime-types and add compatibility for xdg-app ones
+* Add *.dib glob to BMP images
+* Use official IANA mime-types for WMF and EMF images
+* Add application/raml+yaml mime-type
+* Add GPX mimetypes as found in the wild
+* Add application/vnd.squashfs and application/vnd.snap mime-types
+* Add mime-type for IGES documents
+* Add mime-types for Sass CSS pre-processor files
+* Add mime-type for Twig templates
+* Add alias application/nappdf for application/pdf
+* Add mimetype for AppImage
+* Add application/x-bsdiff mime-type
+* Add Gherkin feature specifications mime-type
+* Use official IANA registered type for application/vnd.chess-pgn
+* Use new IANA registered type for application/geo+json
+* Use official IANA registered type for application/vnd.comicbook+zip
+* Use official IANA registered type for application/vnd.rar
+* Use official IANA registered type for application/vnd.framemaker
+* Improve VRML mime-type
+* Better MPEG-2 TS magic
+* Better magic for 669 tracker MOD files
+* Fix misdetection of zip files as their content
+* Fix multi-page DjVu detection by file
+* Fix TGA magic detection
+* Fixes related to AMR audio files
+* Remove "*.sg" glob for Sega Master System ROM types
+
+shared-mime-info 1.6 (2016-02-23)
+* Add XAR archive mime-type
+* Add GeoJSON mime-type
+* Add GPX mime-type
+* Add xdg-app mime-type
+* Add *.xht glob and magic for XHTML files
+* Bump priority of archive mime-types with long magics,
+  to avoid false positives when detecting files inside
+  the archive itself
+
+shared-mime-info 1.5 (2015-09-15)
+* Fix compilation with glib < 2.26
+* Update DTD
+
+Mime-type changes:
+* Add more globs to console ROM files
+* Use "folder" generic-icon for inode/directory
+* Bump priority for ISO images glob matching to work
+  around confusion around Wii image files
+* Add application/owl+xml
+* Add text/turtle
+* Use IANA registered image/vnd.zbrush.pcx for PCX
+* Add text/rust for Rust source code
+* Add application/ld+json as subclass of application/json
+* Add text/csv-schema
+* Add application/vnd.coffeescript
+* Make application/vnd.apple.mpegurl a subclass of text/plain
+* Make application/sdp a subclass of text/plain
+* Add application/jrd+json as subclass of application/json
+* Add MTM, MED, 699 and Ultratracker magic for application/x-mod
+* Add Meson build definitions
+* Match newer versions of XCF files
+* Use IANA registered type for PKCS#12
+* Add application/x-doom-wad
+* Add Amiga disk image
+* Rename "Dreamcast ROM" to "Dreamcast GD-ROM"
+* Add application/x-wii-wad
+* Add magic and tests to application/x-gameboy-rom
+* Add application/x-saturn-rom
+* Fix application/x-genesis-rom translation rules
+* Split up multi-page DjVu into its own mime-type
+
+shared-mime-info 1.4 (2015-02-05)
+* Add glob for low-resolution videos from GoPro
+* Add mime-type for partially downloaded files
+* Use IANA registered mime-type for Debian packages
+* Add another magic for OTF fonts
+* Add support for Adobe PageMaker
+* Remove the Apple iOS PNG variant
+* Add *.dbk glob for DocBook
+* Use IANA registered mime-type for Vivo
+* Remove obsolete application/x-gmc-link mime-type
+* Make application/x-wais-source a subclass of text/plain
+* Flip application/smil+xml and application/smil type/alias
+* Add Nintendo 64 ROM magic
+* Add qpress archive support
+* Add image/x-tiff-multipage mime-type
+* Rename "Microsoft icon" to "Windows icon"
+* Add magic for ODB files
+* Use IANA registered text/markdown for Markdown
+* New mimetype for SCons scripts as subclass of x-python
+* Make application/pgp-encrypted a subclass of text/plain
+* Associate *.qmltypes and *.qmlproject files with the text/x-qml mime type
+* Add text/x-genie mime type for Genie source code
+
+* Disable fdatasync() usage if PKGSYSTEM_ENABLE_FSYNC is set
+* Skip mime database update if packages are older than cache
+* Add "-n" option to update-mime-database to only update if "newer"
+
+shared-mime-info 1.3 (2014-04-08)
+* Mime-type changes:
+- Add Aliases for OpenOffice Base and StarWriter
+- Add Apple Keynote 5 mime-type
+- Add mimetype for compressed FictionBook2
+- Don't recognize all .asc files as application/pgp-encrypted
+- Add tree magic for the Kindle e-book reader
+- Add LZ4 archive type
+- Add PC Engine, GameCube and Wii "ROM" types
+- Add audio/x-opus+ogg mime-type
+- Add image/webp mime-type
+- Prefer application/vnd.ms-asf to video/x-ms-asf
+- Add application/x-riff mime-type
+- Add JSON mime-type
+- Add *.jsm glob for Javascript
+- Add magic and glob patterns for compressed x-spss-sav files
+- JavaScript and CSS are not subclasses of text/x-csrc
+- Remove *.CSSL glob for CSS files
+
+* Call g_type_init() only with older glib
+* Fix failures on NetBSD
+* Store MEDIA/SUBTYPE.xml files in lowercase
+
+shared-mime-info 1.2 (2013-09-30)
+* Mime-type changes:
+- Use IANA registered application/sql type for SQL
+- Add test for text/x-python
+- Added *.pyx as Pyrex/Cython variant of text/x-python
+- Lower the priority of the *png glob on Apple PNGs
+- Add magic for Kobo e-book reader
+- Add another magic for EPub books
+- Add missing globs and tests for OpenPGP files
+- Add MIME types for raw disk images
+- Add video/x-matroska-3d mime-type
+- Use application/vnd.adobe.flash.movie for SWF
+- Use application/vnd.nintendo.snes.rom for SNES ROMs, associate *.sfc with them
+- Fix shebang matches for shell scripts
+- Remove *.ogv as a glob for Theora videos as they might not be Theora
+- Improve detection of Perl scripts
+- Add more aliases for Photoshop images
+- Add Microsoft Publisher mime-type
+- Correct JPEG2000 definition
+
+* Check for errors when saving files, and ensure that files
+  are saved to disk before carrying on.
+* Don't use access() to check for writability
+* Rename configure.in to configure.ac
+
 shared-mime-info 1.1 (2012-02-13)
 * Mime-type changes:
 - Add application/x-ccmx
